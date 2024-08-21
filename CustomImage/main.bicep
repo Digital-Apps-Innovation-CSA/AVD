@@ -105,7 +105,7 @@ resource azImageTemplate 'Microsoft.VirtualMachineImages/imageTemplates@2022-07-
       publisher: vmOfferDetails.publisher
       offer: vmOfferDetails.offer
       sku: vmOfferDetails.sku
-      version: 'latest'
+      version: '2.1.0'
     }
     customize: customizationsModule.outputs.customizationsOutput
     vmProfile: {
