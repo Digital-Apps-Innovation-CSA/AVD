@@ -96,7 +96,7 @@ resource azImageTemplate 'Microsoft.VirtualMachineImages/imageTemplates@2022-07-
         galleryImageId: azImage.id
         runOutputName: 'myImageTemplateRunOutput'
         replicationRegions: [
-          'Australia East'
+          'North US'
         ]
       }
     ]

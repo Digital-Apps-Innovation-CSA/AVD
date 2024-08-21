@@ -22,11 +22,11 @@ var customizations = [
   // Set the timezone to New Zealand Standard Time
   {
     type: 'PowerShell'
-    name: 'Set Timezone - New Zealand Standard Time'
+    name: 'Set Timezone - Coordinated Universal Time'
     runElevated: true
     runAsSystem: true
     inline: [
-      'Set-TimeZone -Id "New Zealand Standard Time"'
+      'Set-TimeZone -Id "Coordinated Universal Time"'
     ]
   }
 
@@ -58,16 +58,12 @@ var customizations = [
 
   // Copy Storage Explorer from the Storage account to the temporary directory
   {
-    type: 'PowerShell'
-    name: 'Copy Storage Explorer from Storage account'
-    runElevated: true
-    runAsSystem: true
-    inline: [
-      // Use double backslashes to represent a single backslash in the file path
-      'Invoke-RestMethod  https://${stgaccountname}.blob.${environmentMetadata.suffixes.storage}/iac/StorageExplorer-windows-x64.exe -OutFile  $env:SystemDrive\\apps\\StorageExplorer-windows-x64.exe'
-    ]
+    type: 'File'
+    name: 'Copy StorageAccount from Storage account'
+    sourceUri: 'https://${stgaccountname}.blob.${environmentMetadata.suffixes.storage}/iac/StorageExplorer-windows-x64.exe'
+    destination: '$env:SystemDrive\\apps\\StorageExplorer-windows-x64.exe'
   }
-
+  
   // Extract BGInfo
   {
     type: 'PowerShell'
@@ -89,9 +85,9 @@ var customizations = [
       inline: [
         // Use double backslashes to represent a single backslash in the file path
         // Check if the executable file exists
-      '$exePath = "$env:SystemDrive\\apps\\BGInfo\\Bginfo64.exe"'
+      '$exePath = "$env:SystemDrive\\apps\\Bginfo64.exe"'
       'if (Test-Path $exePath) {'
-      '  & $exePath'
+      '  & $exePath /timer:0 /silent /nolicprompt'
       '} else {'
       '  Write-Output "The file $exePath does not exist."'
       '}'
