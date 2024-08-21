@@ -1,6 +1,6 @@
 // Define parameters for the Bicep template
 param location string = resourceGroup().location
-param imagetemplatename string
+param imagetemplatename string = 'template'
 param azComputeGalleryName string = 'myGallery'
 @description('The name of the Storage account.')
 param stgaccountname string
