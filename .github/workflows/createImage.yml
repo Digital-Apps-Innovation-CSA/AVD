@@ -1,0 +1,53 @@
+name: Azure Image Builder - Build and Publish Image Template
+
+on:
+  workflow_dispatch:
+  push:
+     branches:
+        - develop
+jobs:
+  ImageBuilderDeploy:
+    runs-on: ubuntu-latest
+    steps:   
+    - uses: actions/checkout@v4
+    - name: Azure login
+      uses: azure/login@v2
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    
+    - name: Deploy Azure Storage Account to Azure for Apps
+      run: |
+          az group create --name testrvr2 --location centralus
+          az deployment group create \
+            --template-file ./CustomImage/storageaccount.bicep \
+            --resource-group testrvr2 \
+            --parameters location=centralus stgaccountname=storagervr0012 publicaccess=false
+    
+    - name: Deploy Azure Storage Account to Azure for Apps
+      run: |
+           az storage blob upload-batch -d 'iac' --account-name storagervr0012 -s ./apps --type block --overwrite $(overwrite) --verbose
+           blobs=$(az storage blob list --account-name storagervr0012 --container-name 'iac' --query '[].{name:name, url:properties.url}' -o tsv)
+           echo $blobs
+
+    - name: Deploy Azure Image Builder Infrastructure
+      run: |
+          az deployment group create \
+                    --template-file ./CustomImage/main.bicep \
+                    --resource-group testrvr2 \
+                    --parameters location=centralus imagetemplatename=templatervr stgaccountname=storagervr0012
+
+  ImageBuilderRun:
+    needs: ImageBuilderDeploy
+    runs-on: ubuntu-latest
+   
+    steps:   
+    - uses: actions/checkout@v4
+    - name: Azure login
+      uses: azure/login@v2
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        
+    - name: 'Run Azure Image Builder'
+      run: |
+          az image builder run -n templatervr -g testrvr2 --no-wait --verbose
+          az image builder wait -n templatervr -g testrvr2 --custom "lastRunStatus.runState!='Running'" --verbose
