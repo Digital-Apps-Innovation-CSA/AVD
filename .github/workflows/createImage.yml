@@ -47,7 +47,7 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
         
-    - name: 'Run Azure Image Builder'
-      run: |
-          az image builder run -n templatervr -g testrvr2 --no-wait --verbose
-          az image builder wait -n templatervr -g testrvr2 --custom "lastRunStatus.runState!='Running'" --verbose
+  #  - name: 'Run Azure Image Builder'
+  #    run: |
+  #        az image builder run -n templatervr -g testrvr2 --no-wait --verbose
+  #        az image builder wait -n templatervr -g testrvr2 --custom "lastRunStatus.runState!='Running'" --verbose

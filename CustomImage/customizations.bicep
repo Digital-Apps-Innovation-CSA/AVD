@@ -64,7 +64,7 @@ var customizations = [
     runAsSystem: true
     inline: [
       // Use double backslashes to represent a single backslash in the file path
-      'Invoke-RestMethod  https://${stgaccountname}.blob.${environmentMetadata.suffixes.storage}/iac/storageexplorer/StorageExplorer-windows-x64.exe -OutFile  $env:SystemDrive\\apps\\StorageExplorer-windows-x64.exe'
+      'Invoke-RestMethod  https://${stgaccountname}.blob.${environmentMetadata.suffixes.storage}/iac/StorageExplorer-windows-x64.exe -OutFile  $env:SystemDrive\\apps\\StorageExplorer-windows-x64.exe'
     ]
   }
 
@@ -79,6 +79,24 @@ var customizations = [
       'Expand-Archive -LiteralPath $env:SystemDrive\\apps\\BGInfo.zip -DestinationPath $env:SystemDrive\\apps\\'
     ]
   }
+
+    // Install BGIngot
+    {
+      type: 'PowerShell'
+      name: 'Install BGINFO'
+      runElevated: true
+      runAsSystem: true
+      inline: [
+        // Use double backslashes to represent a single backslash in the file path
+        // Check if the executable file exists
+      '$exePath = "$env:SystemDrive\\apps\\BGInfo\\Bginfo64.exe"'
+      'if (Test-Path $exePath) {'
+      '  & $exePath'
+      '} else {'
+      '  Write-Output "The file $exePath does not exist."'
+      '}'
+      ]
+    }
 
   // Install Storage Explorer
   {
