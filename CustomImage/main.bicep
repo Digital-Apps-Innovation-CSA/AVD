@@ -1,6 +1,6 @@
 // Define parameters for the Bicep template
 param location string = resourceGroup().location
-param imagetemplatename string = 'template'
+param imagetemplatename string
 param azComputeGalleryName string = 'myGallery'
 @description('The name of the Storage account.')
 param stgaccountname string
@@ -105,7 +105,7 @@ resource azImageTemplate 'Microsoft.VirtualMachineImages/imageTemplates@2022-07-
       publisher: vmOfferDetails.publisher
       offer: vmOfferDetails.offer
       sku: vmOfferDetails.sku
-      version: '2.1.0'
+      version: 'latest'
     }
     customize: customizationsModule.outputs.customizationsOutput
     vmProfile: {
