@@ -10,6 +10,8 @@ param vmOfferDetails object
 param vmProfile object
 param customizations array
 
+param imageversion string
+
 resource uami 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31'  existing ={
   name: azUserAssignedManagedIdentity
 }
@@ -49,7 +51,7 @@ resource azImageTemplate 'Microsoft.VirtualMachineImages/imageTemplates@2022-07-
     distribute: [
       {
         type: 'SharedImage'
-        galleryImageId: azImage.id
+        galleryImageId:  '${azImage.id}/versions/${imageversion}'
         runOutputName: 'myImageTemplateRunOutput'
         replicationRegions: [
           'West US'
