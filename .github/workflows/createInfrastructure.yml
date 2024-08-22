@@ -1,4 +1,4 @@
-name: Azure Image Builder - Create Storage Account
+name: Create Infrastructure 
 
 on:
    workflow_dispatch:
@@ -19,9 +19,9 @@ jobs:
       run: |
           az group create --name testrvr2 --location centralus
           az deployment group create \
-            --template-file ./CustomImage/storageaccount.bicep \
+            --template-file ./CustomImage/infrastructure.bicep \
             --resource-group testrvr2 \
-            --parameters location=centralus stgaccountname=storagervr0012 publicaccess=false
+            --parameters location=centralus stgaccountname=storagervr0012 publicaccess=false azComputeGalleryName=galleryrvr001 azComputeImageName=imagervr001 azUserAssignedManagedIdentity=useri
     
     - name: Deploy Azure Storage Account to Azure for Apps
       run: |

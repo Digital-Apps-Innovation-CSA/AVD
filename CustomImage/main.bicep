@@ -2,8 +2,10 @@
 param location string = resourceGroup().location
 param imagetemplatename string
 param azComputeGalleryName string = 'myGallery'
+// Define the parameter for the Storage account name
 @description('The name of the Storage account.')
 param stgaccountname string
+
 param azUserAssignedManagedIdentity string = 'useri'
 
 // Define the details for the VM offer
@@ -20,47 +22,13 @@ module customizationsModule 'customizations.bicep' = {
     stgaccountname: stgaccountname
   }
 }
-
-// Create a user-assigned managed identity
-resource uami 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
+resource uami 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31'  existing ={
   name: azUserAssignedManagedIdentity
-  location: location
-}
-
-// Create a Compute Gallery
-resource azComputeGallery 'Microsoft.Compute/galleries@2022-03-03' = {
-  name: azComputeGalleryName
-  location: location
-  properties: {
-    description: 'mygallery'
-  }
-}
-
-// Assign the Contributor role to the managed identity at the resource group scope
-resource uamicontribassignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(resourceGroup().id, 'contributor')
-  properties: {
-    principalId: uami.properties.principalId
-    principalType: 'ServicePrincipal' 
-    roleDefinitionId: resourceId('Microsoft.Authorization/roleDefinitions', 'b24988ac-6180-42a0-ab88-20f7382dd24c') // Contributor
-  }
-  scope: resourceGroup()
-}
-
-// Assign the Storage Blob Data Reader role to the managed identity at the resource group scope
-resource uamiblobassignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(resourceGroup().id, 'blobreader')
-  properties: {
-    principalId: uami.properties.principalId
-    principalType: 'ServicePrincipal' 
-    roleDefinitionId: resourceId('Microsoft.Authorization/roleDefinitions', '2a2b9908-6ea1-4ae2-8e65-a410df84e7d1') // Storage Blob Data Reader
-  }
-  scope: resourceGroup()
 }
 
 // Create an image in the Compute Gallery
 resource azImage 'Microsoft.Compute/galleries/images@2022-03-03' = {
-  name: '${azComputeGallery.name}/myImage'
+  name: '${azComputeGalleryName}/myImage'
   location: location
   properties: {
     description: 'myImage'

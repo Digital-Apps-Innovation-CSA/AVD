@@ -10,6 +10,11 @@ param stgaccountname string
 @description('Sets the public access of the storage account.')
 param publicaccess bool
 
+param azComputeGalleryName string = 'myGallery'
+
+param azUserAssignedManagedIdentity string = 'useri'
+
+
 // Create a Storage account
 resource storgeaccount 'Microsoft.Storage/storageAccounts@2023-01-01' = {
   name: toLower(stgaccountname) // Convert the Storage account name to lowercase
@@ -42,6 +47,46 @@ resource appcontainer 'Microsoft.Storage/storageAccounts/blobServices/containers
     publicAccess: publicaccess ? 'Blob' : 'None' // Set the public access setting
   }
 }
+
+
+// Create a user-assigned managed identity
+resource uami 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
+  name: azUserAssignedManagedIdentity
+  location: location
+}
+
+// Create a Compute Gallery
+resource azComputeGallery 'Microsoft.Compute/galleries@2022-03-03' = {
+  name: azComputeGalleryName
+  location: location
+  properties: {
+    description: 'mygallery'
+  }
+}
+
+// Assign the Contributor role to the managed identity at the resource group scope
+resource uamicontribassignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(resourceGroup().id, 'contributor')
+  properties: {
+    principalId: uami.properties.principalId
+    principalType: 'ServicePrincipal' 
+    roleDefinitionId: resourceId('Microsoft.Authorization/roleDefinitions', 'b24988ac-6180-42a0-ab88-20f7382dd24c') // Contributor
+  }
+  scope: resourceGroup()
+}
+
+// Assign the Storage Blob Data Reader role to the managed identity at the resource group scope
+resource uamiblobassignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(resourceGroup().id, 'blobreader')
+  properties: {
+    principalId: uami.properties.principalId
+    principalType: 'ServicePrincipal' 
+    roleDefinitionId: resourceId('Microsoft.Authorization/roleDefinitions', '2a2b9908-6ea1-4ae2-8e65-a410df84e7d1') // Storage Blob Data Reader
+  }
+  scope: resourceGroup()
+}
+
+
 
 // Output the ID of the Storage account
 output storgeaccountid string = storgeaccount.id
