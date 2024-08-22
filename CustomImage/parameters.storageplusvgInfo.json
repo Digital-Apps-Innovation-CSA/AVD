@@ -1,0 +1,104 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "imagetemplatename": {
+        "value": "TemplateImageRVR"
+      },
+      "stgaccountname": {
+        "value": "storagervr0012"
+      },
+      "azUserAssignedManagedIdentity": {
+        "value": "useri"
+      },
+      "azComputeGalleryName": {
+        "value": "myGallery"
+      },
+      "imagaName": {
+        "value": "myImage"
+      },
+      "imageDescription": {
+        "value": "myImage description"
+      },
+      "vmOfferDetails": {
+        "value": {
+            "offer": "WindowsServer",
+            "publisher": "MicrosoftWindowsServer",
+            "sku": "2022-datacenter-azure-edition",
+            "osType": "Windows",
+            "osState": "Generalized",
+            "hyperVGeneration": "V2",
+            "version": "latest"
+        }
+      },
+      "vmProfile": {
+        "value": {
+            "vmSize": "Standard_D4ds_v5",
+            "osDiskSizeGB": 0
+        }
+      },
+      "customizations": {
+        "value": [
+            {
+              "type": "PowerShell",
+              "name": "Create Apps Directory on OS drive",
+              "runElevated": false,
+              "runAsSystem": false,
+              "inline": [
+                "New-Item -ItemType Directory -Force -Path $env:SystemDrive\\\\apps\\\\"
+              ]
+            },
+            {
+              "type": "File",
+              "name": "Copy BGInfo from Storage account",
+              "sourceUri": "https://storagervr0012.blob.core.windows.net/iac/bginfo/BGInfo.zip",
+              "destination": "$env:SystemDrive\\\\apps\\\\BGInfo.zip"
+            },
+            {
+              "type": "File",
+              "name": "Copy StorageAccount from Storage account",
+              "sourceUri": "https://storagervr0012.blob.core.windows.net/iac/StorageExplorer-windows-x64.exe",
+              "destination": "$env:SystemDrive\\\\apps\\\\StorageExplorer-windows-x64.exe"
+            },
+            {
+              "type": "PowerShell",
+              "name": "Extract BGInfo",
+              "runElevated": true,
+              "runAsSystem": true,
+              "inline": [
+                "Expand-Archive -LiteralPath $env:SystemDrive\\\\apps\\\\BGInfo.zip -DestinationPath $env:SystemDrive\\\\apps\\\\"
+              ]
+            },
+            {
+              "type": "PowerShell",
+              "name": "Install BGINFO",
+              "runElevated": true,
+              "runAsSystem": true,
+              "inline": [
+                "$exePath = \"$env:SystemDrive\\\\apps\\\\Bginfo64.exe\"",
+                "if (Test-Path $exePath) {",
+                "  & $exePath /timer:0 /silent /nolicprompt",
+                "} else {",
+                "  Write-Output \"The file $exePath does not exist.\"",
+                "}"
+              ]
+            },
+            {
+              "type": "PowerShell",
+              "name": "Install Storage Explorer",
+              "runElevated": true,
+              "runAsSystem": true,
+              "inline": [
+                "$exePath = \"$env:SystemDrive\\\\apps\\\\StorageExplorer-windows-x64.exe\"",
+                "if (Test-Path $exePath) {",
+                "  & $exePath /VERYSILENT /SUPPRESSMSGBOXES /NORESTART /ALLUSERS",
+                "} else {",
+                "  Write-Output \"The file $exePath does not exist.\"",
+                "}"
+              ]
+            }
+          ]
+        }
+    }
+      
+}
