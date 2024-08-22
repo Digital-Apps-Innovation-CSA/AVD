@@ -20,7 +20,7 @@ jobs:
           az deployment group create \
                     --template-file ./CustomImage/main.bicep \
                     --resource-group testrvr2 \
-                    --parameters location=centralus imagetemplatename=template2 stgaccountname=storagervr0012
+                    --parameters location=centralus imagetemplatename=template123 stgaccountname=storagervr0012
 
   #ImageBuilderRun:
   #  needs: ImageBuilderDeploy

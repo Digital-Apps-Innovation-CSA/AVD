@@ -19,7 +19,7 @@ var customizations = [
     ]
   }
 
-  // Set the timezone to New Zealand Standard Time
+  // Set the timezone to UTC Time
   {
     type: 'PowerShell'
     name: 'Set Timezone - Coordinated Universal Time'
@@ -31,22 +31,22 @@ var customizations = [
   }
 
   // Install Windows updates, excluding preview updates
-  {
-    type: 'WindowsUpdate'
-    searchCriteria: 'IsInstalled=0'
-    filters: [
-      'exclude:$_.Title -like \'*Preview*\'' // Exclude preview updates
-      'include:$true'
-    ]
-    updateLimit: 20
-  }
+ // {
+ //   type: 'WindowsUpdate'
+ //   searchCriteria: 'IsInstalled=0'
+ //   filters: [
+ //     'exclude:$_.Title -like \'*Preview*\'' // Exclude preview updates
+ //     'include:$true'
+ //   ]
+ //  updateLimit: 20
+ // }
 
   // Restart the system after Windows updates have completed
-  {
-    type: 'WindowsRestart'
-    restartCheckCommand: 'write-host \'restarting post Windows Updates\''
-    restartTimeout: '10m'
-  }
+ // {
+ //   type: 'WindowsRestart'
+ //   restartCheckCommand: 'write-host \'restarting post Windows Updates\''
+ //   restartTimeout: '10m'
+ // }
 
   // Copy BGInfo from the Storage account to the temporary directory
   {
@@ -113,22 +113,22 @@ var customizations = [
   }
 
    // Install any Windows updates, that are left or needed after app installs
-   {
-    type: 'WindowsUpdate'
-    searchCriteria: 'IsInstalled=0'
-    filters: [
-      'exclude:$_.Title -like \'*Preview*\'' // Exclude preview updates
-      'include:$true'
-    ]
-    updateLimit: 20
-  }
+   //{
+   // type: 'WindowsUpdate'
+   // searchCriteria: 'IsInstalled=0'
+   // filters: [
+   //   'exclude:$_.Title -like \'*Preview*\'' // Exclude preview updates
+   //   'include:$true'
+   // ]
+   // updateLimit: 20
+ // }
 
   // Restart the system after Windows updates have completed and fresh restart before sysprep.
-  {
-    type: 'WindowsRestart'
-    restartCheckCommand: 'write-host \'restarting post image customisation\''
-    restartTimeout: '10m'
-  }
+  //{
+  //  type: 'WindowsRestart'
+  //  restartCheckCommand: 'write-host \'restarting post image customisation\''
+  //  restartTimeout: '10m'
+  //}
 
 ]
 
