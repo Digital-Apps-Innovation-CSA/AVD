@@ -51,6 +51,9 @@ resource azImageTemplate 'Microsoft.VirtualMachineImages/imageTemplates@2022-07-
         type: 'SharedImage'
         galleryImageId: azImage.id
         runOutputName: 'myImageTemplateRunOutput'
+        replicationRegions: [
+          'West US'
+        ]
       }
     ]
     source: {
