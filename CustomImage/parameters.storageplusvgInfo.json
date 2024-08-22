@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
       "imagetemplatename": {
-        "value": "TemplateImageRVR22"
+        "value": "TemplateRVRLAST"
       },
       "azUserAssignedManagedIdentity": {
         "value": "useri"
@@ -50,12 +50,6 @@
               "name": "Copy BGInfo from Storage account",
               "sourceUri": "https://storagervr0012.blob.core.windows.net/iac/bginfo/BGInfo.zip",
               "destination": "$env:SystemDrive\\\\apps\\\\BGInfo.zip"
-            },
-            {
-              "type": "File",
-              "name": "Copy StorageAccount from Storage account",
-              "sourceUri": "https://storagervr0012.blob.core.windows.net/iac/StorageExplorer-windows-x64.exe",
-              "destination": "$env:SystemDrive\\\\apps\\\\StorageExplorer-windows-x64.exe"
             },
             {
               "type": "PowerShell",
