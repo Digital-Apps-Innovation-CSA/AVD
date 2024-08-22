@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
       "imageversion":{
-        "value": "2.0.1"
+        "value": "3.0.1"
       },
       "imagetemplatename": {
         "value": "TemplateImgRVR"
@@ -81,7 +81,7 @@
               "inline": [
                 "$exePath = \"$env:SystemDrive\\\\apps\\\\Bginfo64.exe\"",
                 "if (Test-Path $exePath) {",
-                "  & $exePath /timer:0 /silent /nolicprompt",
+                "  & $exePath /timer:0 /silent /nolicprompt /all",
                 "} else {",
                 "  Write-Output \"The file $exePath does not exist.\"",
                 "}"
