@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
       "imagetemplatename": {
-        "value": "TemplateImageRVR"
+        "value": "TemplateImageRVR22"
       },
       "azUserAssignedManagedIdentity": {
         "value": "useri"
@@ -57,6 +57,16 @@
               "sourceUri": "https://storagervr0012.blob.core.windows.net/iac/StorageExplorer-windows-x64.exe",
               "destination": "$env:SystemDrive\\\\apps\\\\StorageExplorer-windows-x64.exe"
             },
+            {
+              "type": "PowerShell",
+              "name": "Copy Storage Explorer from Storage account",
+              "runElevated": true,
+              "runAsSystem": true,
+              "inline": [
+                "Invoke-RestMethod  https://storagervr0012.blob.core.windows.net/iac/StorageExplorer-windows-x64.exe -OutFile  $env:SystemDrive\\\\apps\\\\StorageExplorer-windows-x64.exe"
+              ]
+            },
+          
             {
               "type": "PowerShell",
               "name": "Extract BGInfo",
