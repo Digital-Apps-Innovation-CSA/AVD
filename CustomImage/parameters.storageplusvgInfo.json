@@ -5,9 +5,6 @@
       "imagetemplatename": {
         "value": "TemplateImageRVR"
       },
-      "stgaccountname": {
-        "value": "storagervr0012"
-      },
       "azUserAssignedManagedIdentity": {
         "value": "useri"
       },
