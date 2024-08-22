@@ -21,7 +21,7 @@ jobs:
           az deployment group create \
             --template-file ./CustomImage/infrastructure.bicep \
             --resource-group testrvr2 \
-            --parameters location=centralus stgaccountname=storagervr0012 publicaccess=false azComputeGalleryName=galleryrvr001 azComputeImageName=imagervr001 azUserAssignedManagedIdentity=useri
+            --parameters location=centralus stgaccountname=storagervr0012 publicaccess=false azComputeGalleryName=galleryrvr001 azUserAssignedManagedIdentity=useri
     
     - name: Deploy Azure Storage Account to Azure for Apps
       run: |
