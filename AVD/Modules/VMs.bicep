@@ -12,19 +12,19 @@ param intune bool = false
 //***********************************************************************************************************************
 //Parameters - Host Pool Settings
 @description('Name for Host Pool.')
-param hostPoolName string
+param hostPoolName string = 'hostrvr01'
 
 @description('Domain that AVD Session Hosts will be joined to.')
-param domainToJoin string
+param domainToJoin string = 'contoso.com'
 
 @description('OU Path were new AVD Session Hosts will be placed in Active Directory')
-param ouPath string
+param ouPath string = 'OU=AVD,DC=contoso,DC=com'
 
 @description('Name of resource group containing AVD HostPool')
-param resourceGroupName string
+param resourceGroupName string = 'AVD'
 
 @description('Friendly name of Desktop Application Group. This is shown under Remote Desktop client.')
-param desktopName string
+param desktopName string = 'AVD Desktop'
 
 //***********************************************************************************************************************
 //Parameters - DSC Parameters
@@ -32,114 +32,116 @@ param artifactsLocation string
 
 @description('Azure Tenant ID. Used for DSC scripts.')
 @secure()
-param AzTenantID string
+param AzTenantID string = '00000000-0000-0000-0000-000000000000'
 
 @description('Name of the Application Group for DSC script.')
-param appGroupName string
+param appGroupName string = 'AVD-AppGroup'
 
 @description('Application ID for Service Principal. Used for DSC scripts.')
-param appID string
+param appID string = '00000000-0000-0000-0000-000000000000'
 
 @description('Application Secret for Service Principal.')
 @secure()
-param appSecret string
+param appSecret string = '00000000-0000-0000-0000-000000000000'
 
 @description('Parameter to determine if user assignment is required. If true defaultUsers will be used.')
-param assignUsers string
+param assignUsers string = 'false'
 
 @description('CSV list of default users to assign to AVD Application Group.')
-param defaultUsers string
+param defaultUsers string = ''
 
 //***********************************************************************************************************************
 //Parameters - Session Host VM Settings (OS, Disk, Networking)
 @description('Location for all standard resources to be deployed into.')
-param location string
+param location string = 'westus'
 
 @description('Prefix to use for Session Host VM build. Build will add the version details to this. E.g. AVD-PROD-11-0-x X being machine number.')
-param vmPrefix string
+param vmPrefix string = 'AVD-PROD'
 
 @description('Required storage type for Session Host VM OS disk.')
 @allowed([
   'Standard_LRS'
   'Premium_LRS'
 ])
-param vmDiskType string
+param vmDiskType string = 'Standard_LRS'
 
 @description('VM Size to be used for Session Host build. E.g. Standard_D2s_v3')
-param vmSize string
+param vmSize string = 'Standard_D2s_v4'
 
 @description('Is Disk Encryption needed.')
-param diskEncryptionRequired bool
+param diskEncryptionRequired bool = false
 
 @description('KeyVault Resource ID for Disk Encryption.')
-param keyVaultResourceId string
+param keyVaultResourceId string = ''
 
 @description('KeyVault URI for Disk Encryption.')
-param keyVaultUrl string
+param keyVaultUrl string = ''
 
 @description('KeyVault Key URI.')
-param keyUrl string
+param keyUrl string = ''
 
 @description('Administrator Login Username Domain Join operation.')
-param administratorAccountUserName string
+param administratorAccountUserName string = 'admirvr'
 
 @description('Administrator Login Password Domain Join operation.')
 @secure()
-param administratorAccountPassword string
+param administratorAccountPassword string = 'Password123!'
 
 @description('Local Administrator Login Username for Session Hosts.')
-param localAdministratorAccountUserName string
+param localAdministratorAccountUserName string = 'localadmirvr'
 
 @description('Administrator Login Password for Session Hosts.')
 @secure()
-param localAdministratorAccountPassword string
+param localAdministratorAccountPassword string = 'Password123!'
 
 @description('Number of Session Host VMs required.')
-param AVDnumberOfInstances int
+param AVDnumberOfInstances int = 2
 
 @description('Current number of Session Host VMs. Populated automatically for upgrade build. Do not edit.')
-param currentInstances int
+param currentInstances int = 1
 
 @description('Resource Group containing the VNET to which to join Session Host VMs.')
-param existingVNETResourceGroup string
+param existingVNETResourceGroup string = 'AVD'
 
 @description('Name of the VNET that the Session Host VMs will be connected to.')
-param existingVNETName string
+param existingVNETName string = 'VnetAVD'
 
 @description('The name of the relevant VNET Subnet that is to be used for deployment.')
-param existingSubnetName string
+param existingSubnetName string = 'default'
 
 @description('Is Image Trusted Launch?')
-param trustedLaunch bool
+param trustedLaunch bool = true
 
 @description('Subscription containing the Shared Image Gallery')
-param sharedImageGallerySubscription string
+param sharedImageGallerySubscription string = subscription().subscriptionId
 
 @description('Resource Group containing the Shared Image Gallery.')
-param sharedImageGalleryResourceGroup string
+param sharedImageGalleryResourceGroup string = 'AVD'
 
 @description('Name of the existing Shared Image Gallery to be used for image.')
-param sharedImageGalleryName string
+param sharedImageGalleryName string = 'AVDGallery'
 
 @description('Name of the Shared Image Gallery Definition being used for deployment. I.e: AVDGolden')
-param sharedImageGalleryDefinitionname string
+param sharedImageGalleryDefinitionname string = 'AVDGolden'
 
 @description('Version name for image to be deployed as. I.e: 1.0.0')
-param sharedImageGalleryVersionName string
+param sharedImageGalleryVersionName string = '1.0.0'
 
 @description('Log Analytics Workspace ID')
-param workspaceID string
+param workspaceID string = ''
 
 @description('Log Analytics Workspace Key')
-param workspaceKey string
+param workspaceKey string = ''
 
 @description('Log Analytics Workspace Resource Id')
-param logAnalyticsResourceId string
+param logAnalyticsResourceId string = ''
 
 @description('Data Collection Rule Resource Id')
-param DCRId string
+param DCRId string = ''
 
-param tagParams object
+param tagParams object = {
+  
+}
 
 //***********************************************************************************************************************
 //Variables - All
@@ -253,7 +255,7 @@ resource vm 'Microsoft.Compute/virtualMachines@2021-11-01' = [for i in range(0, 
 
 //***********************************************************************************************************************
 //Resources - Custom Script Extension - Language Fix
-resource languagefix 'Microsoft.Compute/virtualMachines/extensions@2021-11-01' = [for i in range(0, AVDnumberOfInstances): {
+/*resource languagefix 'Microsoft.Compute/virtualMachines/extensions@2021-11-01' = [for i in range(0, AVDnumberOfInstances): {
   name: '${vmPrefix}-${i + currentInstances}/languagefix'
   location: location
   properties: {
@@ -275,7 +277,7 @@ resource languagefix 'Microsoft.Compute/virtualMachines/extensions@2021-11-01' =
     vm[i]
   ]
 }]
-
+*/
 //***********************************************************************************************************************
 //Resources - Domain Join Extension - Contains logic for AADJoin or AD Join
 resource joindomain 'Microsoft.Compute/virtualMachines/extensions@2021-11-01' = [for i in range(0, AVDnumberOfInstances): {
@@ -309,13 +311,13 @@ resource joindomain 'Microsoft.Compute/virtualMachines/extensions@2021-11-01' = 
   }
   dependsOn: [
     vm[i]
-    languagefix[i]
+    //languagefix[i]
   ]
 }]
 
 //***********************************************************************************************************************
 //Resources - DSC Extension
-resource dscextension 'Microsoft.Compute/virtualMachines/extensions@2021-11-01' = [for i in range(0, AVDnumberOfInstances): {
+/*resource dscextension 'Microsoft.Compute/virtualMachines/extensions@2021-11-01' = [for i in range(0, AVDnumberOfInstances): {
   name: '${vmPrefix}-${i + currentInstances}/dscextension'
   location: location
   properties: {
@@ -345,7 +347,7 @@ resource dscextension 'Microsoft.Compute/virtualMachines/extensions@2021-11-01' 
     joindomain[i]
   ]
 }]
-
+*/
 //***********************************************************************************************************************
 //Resources - Log Analytics Extension
 // resource loganalytics 'Microsoft.Compute/virtualMachines/extensions@2021-11-01' = [for i in range(0, AVDnumberOfInstances): if (monitoringAgent == true) {
@@ -371,7 +373,7 @@ resource dscextension 'Microsoft.Compute/virtualMachines/extensions@2021-11-01' 
 
 //***********************************************************************************************************************
 //Resources - Disk Encryption Set
-resource AVDDiskEncryption 'Microsoft.Compute/virtualMachines/extensions@2024-03-01' = [for i in range(0, AVDnumberOfInstances): if (diskEncryptionRequired == true) {
+/*resource AVDDiskEncryption 'Microsoft.Compute/virtualMachines/extensions@2024-03-01' = [for i in range(0, AVDnumberOfInstances): if (diskEncryptionRequired == true) {
   name: '${vmPrefix}-${i + currentInstances}/diskencryptionset'
   location: location
   properties: {
@@ -394,10 +396,10 @@ resource AVDDiskEncryption 'Microsoft.Compute/virtualMachines/extensions@2024-03
     vm[i]
   ]
 }]
-
+*/
 //***********************************************************************************************************************
 //Resources - Azure Monitoring Agent - Replacing Microsoft Monitoring Agent
-resource AzureMonitorAgent 'Microsoft.Compute/virtualMachines/extensions@2021-11-01' = [for i in range(0, AVDnumberOfInstances): if (monitoringAgent == true) {
+/*resource AzureMonitorAgent 'Microsoft.Compute/virtualMachines/extensions@2021-11-01' = [for i in range(0, AVDnumberOfInstances): if (monitoringAgent == true) {
     name: '${vmPrefix}-${i + currentInstances}/AzureMonitoringAgent'
     location: location
     properties: {
@@ -411,11 +413,11 @@ resource AzureMonitorAgent 'Microsoft.Compute/virtualMachines/extensions@2021-11
       vm[i]
       dscextension[i]
     ]
-}]
+}]*/
 
 //***********************************************************************************************************************
 //Resources - DCR Rule Association
-resource SessionHostDCRAssociation 'Microsoft.Insights/dataCollectionRuleAssociations@2021-04-01' = [for i in range(0, AVDnumberOfInstances): if (monitoringAgent == true) {
+/*resource SessionHostDCRAssociation 'Microsoft.Insights/dataCollectionRuleAssociations@2021-04-01' = [for i in range(0, AVDnumberOfInstances): if (monitoringAgent == true) {
     name: '${vmPrefix}-${i + currentInstances}-DCRAssc'
     scope: vm[i]
     properties: {
@@ -426,4 +428,4 @@ resource SessionHostDCRAssociation 'Microsoft.Insights/dataCollectionRuleAssocia
         dscextension[i]       
         AzureMonitorAgent[i]
     ]
-}]
+}]*/

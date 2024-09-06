@@ -1,10 +1,10 @@
 //***********************************************************************************************************************
 //Core Deployment Parameters
 targetScope = 'subscription'
-param AzTenantID string
-param artifactsLocation string
-param AVDResourceGroup string
-param workspaceLocation string
+param AzTenantID string = '617bbe3a-5020-4902-9bad-aa56e639a1b4'
+param artifactsLocation string = 'westus'
+param AVDResourceGroup string = 'AVD'
+param workspaceLocation string = 'westus'
 
 //***********************************************************************************************************************
 //Core Build Options Update, NewBuild
@@ -29,7 +29,7 @@ param intune bool = false
 @description('Name of the AVD Workspace to used for this deployment')
 param workspaceName string = 'ABRI-AVD-PROD'
 @description('List of application group resource IDs to be added to Workspace. MUST add existing ones!')
-param applicationGroupReferences string
+param applicationGroupReferences string = 'AppGroup'
 
 //***********************************************************************************************************************
 //Application Group Settings
@@ -63,7 +63,7 @@ param keyType string = 'RSA'
 param keySize int = 2048
 
 @description('Is Disk Encryption needed.')
-param diskEncryptionRequired bool
+param diskEncryptionRequired bool = false
 
 //***********************************************************************************************************************
 //Host Pool Settings
@@ -270,7 +270,7 @@ module backPlane './modules/backPlane.bicep' = {
   ]
 }
 
-module diskEncryptionSet './Modules/DiskEncryption.bicep' = {
+/*module diskEncryptionSet './Modules/DiskEncryption.bicep' = {
   name: 'DiskEncryptionSet'
   scope: resourceGroup(vmResourceGroup)
   params: {
@@ -283,7 +283,7 @@ module diskEncryptionSet './Modules/DiskEncryption.bicep' = {
   dependsOn: [
     resourceGroupDeploy
   ]
-}
+}*/
 
 module VMswithLA './modules/VMs.bicep' = {
   name: '${sharedImageGalleryVersionName}-VMs'
@@ -329,13 +329,13 @@ module VMswithLA './modules/VMs.bicep' = {
     ephemeral: ephemeral
     AADJoin: AADJoin
     intune: intune
-    keyUrl: diskEncryptionSet.outputs.keyUrl
-    keyVaultResourceId: diskEncryptionRequired ? diskEncryptionSet.outputs.keyVaultResourceId : 'null'
-    keyVaultUrl: diskEncryptionRequired ? diskEncryptionSet.outputs.keyVaultUrl : 'null' 
-    diskEncryptionRequired: diskEncryptionRequired
+    //keyUrl: diskEncryptionSet.outputs.keyUrl
+    //keyVaultResourceId: diskEncryptionRequired ? diskEncryptionSet.outputs.keyVaultResourceId : 'null'
+    //keyVaultUrl: diskEncryptionRequired ? diskEncryptionSet.outputs.keyVaultUrl : 'null' 
+   //  diskEncryptionRequired: diskEncryptionRequired
   }
   dependsOn: [
     backPlane
-    diskEncryptionSet
+    //diskEncryptionSet
   ]
 }

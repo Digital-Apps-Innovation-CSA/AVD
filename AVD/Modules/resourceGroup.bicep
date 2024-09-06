@@ -15,16 +15,15 @@ resource vmResourceGroup_resource 'Microsoft.Resources/resourceGroups@2021-01-01
   location: VMlocation
 }
 
-resource AVDResourceGroup_resource 'Microsoft.Resources/resourceGroups@2021-01-01' = {
+/*resource AVDResourceGroup_resource 'Microsoft.Resources/resourceGroups@2021-01-01' = {
   name: AVDResourceGroup
   location: AVDlocation
 }
-
+*/
 resource AVD_DCR_resource 'Microsoft.Resources/resourceGroups@2021-01-01' = {
   name: 'AzureMonitor-DataCollectionRules'
   location: AVDlocation
 }
-
 //***********************************************************************************************************************
 //Output - All
 output DCRRGId string = AVD_DCR_resource.id

@@ -1,0 +1,181 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "AzTenantID": {
+        "value": "617bbe3a-5020-4902-9bad-aa56e639a1b4"
+      },
+      "artifactsLocation": {
+        "value": "westus"
+      },
+      "AVDResourceGroup": {
+        "value": "AVD"
+      },
+      "workspaceLocation": {
+        "value": "westus"
+      },
+      "newBuild": {
+        "value": false
+      },
+      "update": {
+        "value": false
+      },
+      "monitoringAgent": {
+        "value": false
+      },
+      "ephemeral": {
+        "value": true
+      },
+      "AADJoin": {
+        "value": false
+      },
+      "Intune": {
+        "value": false
+      },
+      "workspaceName": {
+        "value": "workspace"
+      },
+      "applicationGroupReferences": {
+        "value": "appGroup1"
+        
+      },
+      "appGroupFriendlyName": {
+        "value": "appGroup1"
+      },
+      "desktopName": {
+        "value": "desktop1"
+      },
+      "keyVaultName": {
+        "value": "keyVault1"
+      },
+      "keyVaultSKU":{ 
+        "value": "standard"
+     },
+     "keyType": {   
+        "value": "RSA"
+     },
+        "keySize": {
+            "value": 2048
+    },
+        "diskEncryptionRequired" :{
+         "value": false
+    },"hostPoolName":{ 
+        "value": "hostpool1"
+    },"hostPoolFriendlyName"  :{
+        "value": "hostpool1"
+    }, "hostPoolType":{
+        "value": "Pooled"
+    }, "personalDesktopAssignmentType": {
+        "value": "Direct"
+    },"maxSessionLimit":{ "value": 12
+    }, "loadBalancerType": { 
+        "value": "BreadthFirst"
+    }, "customRdpProperty": {
+        "value": ""
+    },
+    "tokenExpirationTime": {
+        "value": "60"
+    },
+    "ouPath": {
+        "value": "OU=AVD,DC=contoso,DC=com"
+    },
+    "domain":{
+        "value": "contoso.com"
+    },
+    "administratorAccountUserName": {
+      "value": "adminUser"
+    },
+    "administratorAccountPassword": {
+      "value": "Passwerd1234!"
+    },
+    "localAdministratorAccountUserName": {
+      "value": "localAdminUser"
+    },
+    "localAdministratorAccountPassword": {
+      "value": "Passwerd1234!"
+    },
+    "vmResourceGroup": {
+      "value": "AVD"
+    },
+    "vmLocation": {
+      "value": "westus"
+    },
+    "vmSize": {
+      "value": "Standard_D2s_v3"
+    },
+    "numberOfInstances": {
+      "value": 2
+    },
+    "currentInstances": {
+      "value": 0
+    },
+    "vmPrefix": {
+      "value": "AVD-PROD"
+    },
+    "vmDiskType": {
+      "value": "Premium_LRS"
+    },
+    "existingVNETResourceGroup": {
+      "value": "AVD"
+    },
+    "existingVNETName": {
+      "value": "VnetAVD"
+    },
+    "existingSubnetName": {
+      "value": "default"
+    },
+    "trustedLaunch": {
+      "value": false
+    },
+    "sharedImageGallerySubscription": {
+      "value": "sharedImageGallerySubscriptionID"
+    },
+    "sharedImageGalleryResourceGroup": {
+      "value": "sharedImageGalleryResourceGroup"
+    },
+    "sharedImageGalleryName": {
+      "value": "sharedImageGalleryName"
+    },
+    "sharedImageGalleryDefinitionname": {
+      "value": "AVDGolden"
+    },
+    "sharedImageGalleryVersionName": {
+      "value": "1.0.0"
+    },
+    "assignUsers": {
+      "value": "true"
+    },
+    "defaultUsers": {
+      "value": "user1@example.com,user2@example.com"
+    },
+    "appID": {
+      "value": "appID"
+    },
+    "appSecret": {
+      "value": "appSecret"
+    },
+    "logworkspaceSub": {
+      "value": "logworkspaceSubscriptionID"
+    },
+    "logworkspaceResourceGroup": {
+      "value": "AVD"
+    },
+    "logworkspaceName": {
+      "value": "logworkspaceName"
+    },
+    "workspaceID": {
+      "value": "workspaceID"
+    },
+    "workspaceKey": {
+      "value": "workspaceKey"
+    },
+    "tagParams": {
+      "value": {
+        "Environment": "Production",
+        "Department": "IT"
+      }
+    }
+
+ 
+    }
+}
