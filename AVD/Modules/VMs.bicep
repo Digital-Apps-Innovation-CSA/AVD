@@ -280,7 +280,7 @@ resource vm 'Microsoft.Compute/virtualMachines@2021-11-01' = [for i in range(0, 
 */
 //***********************************************************************************************************************
 //Resources - Domain Join Extension - Contains logic for AADJoin or AD Join
-resource joindomain 'Microsoft.Compute/virtualMachines/extensions@2021-11-01' = [for i in range(0, AVDnumberOfInstances): {
+/*resource joindomain 'Microsoft.Compute/virtualMachines/extensions@2021-11-01' = [for i in range(0, AVDnumberOfInstances): {
   name: '${vmPrefix}-${i + currentInstances}/joindomain'
   location: location
   properties: AADJoin ? {
@@ -313,11 +313,11 @@ resource joindomain 'Microsoft.Compute/virtualMachines/extensions@2021-11-01' = 
     vm[i]
     //languagefix[i]
   ]
-}]
+}]*/
 
 //***********************************************************************************************************************
 //Resources - DSC Extension
-/*resource dscextension 'Microsoft.Compute/virtualMachines/extensions@2021-11-01' = [for i in range(0, AVDnumberOfInstances): {
+resource dscextension 'Microsoft.Compute/virtualMachines/extensions@2021-11-01' = [for i in range(0, AVDnumberOfInstances): {
   name: '${vmPrefix}-${i + currentInstances}/dscextension'
   location: location
   properties: {
@@ -344,10 +344,10 @@ resource joindomain 'Microsoft.Compute/virtualMachines/extensions@2021-11-01' = 
   }
   dependsOn: [
     vm[i]
-    joindomain[i]
+    //joindomain[i]
   ]
 }]
-*/
+
 //***********************************************************************************************************************
 //Resources - Log Analytics Extension
 // resource loganalytics 'Microsoft.Compute/virtualMachines/extensions@2021-11-01' = [for i in range(0, AVDnumberOfInstances): if (monitoringAgent == true) {

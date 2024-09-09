@@ -6,7 +6,7 @@
         "value": "617bbe3a-5020-4902-9bad-aa56e639a1b4"
       },
       "artifactsLocation": {
-        "value": "westus"
+        "value": "https://storagervr0012.blob.core.windows.net/iac/"
       },
       "AVDResourceGroup": {
         "value": "AVD"
@@ -15,7 +15,7 @@
         "value": "westus"
       },
       "newBuild": {
-        "value": false
+        "value": true
       },
       "update": {
         "value": false
@@ -24,7 +24,7 @@
         "value": false
       },
       "ephemeral": {
-        "value": true
+        "value": false
       },
       "AADJoin": {
         "value": false
@@ -128,19 +128,19 @@
       "value": false
     },
     "sharedImageGallerySubscription": {
-      "value": "sharedImageGallerySubscriptionID"
+      "value": "77f3c458-6e3c-4680-9dcc-168faba5ca00"
     },
     "sharedImageGalleryResourceGroup": {
-      "value": "sharedImageGalleryResourceGroup"
+      "value": "testrvr2"
     },
     "sharedImageGalleryName": {
-      "value": "sharedImageGalleryName"
+      "value": "galleryrvr001"
     },
     "sharedImageGalleryDefinitionname": {
-      "value": "AVDGolden"
+      "value": "myImage"
     },
     "sharedImageGalleryVersionName": {
-      "value": "1.0.0"
+      "value": "3.0.1"
     },
     "assignUsers": {
       "value": "true"
