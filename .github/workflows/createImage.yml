@@ -28,8 +28,10 @@ jobs:
     - name: Deploy Azure Image Builder Infrastructure
       id: deploy
       run: |
-          IMAGE_ID=$(az deployment group create --template-file ./CustomImage/main.bicep --resource-group $Image_RG --parameters ./CustomImage/parameters.storageplusvgInfo.json --query properties.outputs.IMAGE_ID.value)
-          echo $IMAGE_ID
+          result=$(az deployment group create --template-file ./CustomImage/main.bicep --resource-group $Image_RG --parameters ./CustomImage/parameters.storageplusvgInfo.json | ConvertFrom-Json)
+          echo ESTE es el resultado $result
+          IMAGE_ID=$(echo $result | jq -r '.properties.outputs.imageId.value')
+          echo Esta es la imagen $IMAGE_ID
           echo "IMAGE_ID=$IMAGE_ID" >> "$GITHUB_OUTPUT"
 
   ImageBuilderRun:
