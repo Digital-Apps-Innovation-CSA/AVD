@@ -17,7 +17,7 @@ jobs:
   ImageBuilderDeploy:
     runs-on: ubuntu-latest
     outputs:
-      IMAGE_ID: ${{ steps.deploy.outputs.IMAGE_ID }}
+      output1: ${{ steps.deploy.outputs.IMAGE_ID }}
     steps:   
     - uses: actions/checkout@v4
     - name: Azure login
@@ -84,7 +84,7 @@ jobs:
            DOMAINJOINACCOUNTPASSWORD : ${{ secrets.DOMAINJOINACCOUNTPASSWORD }}
            LOCALADMINUSERNAME: ${{ secrets.LOCALADMINUSERNAME }}
            LOCALADMINUSERPASSWORD: ${{ secrets.LOCALADMINUSERPASSWORD }}
-           IMAGE_ID: ${{ needs.ImageBuilderDeploy.outputs.IMAGE_ID }}
+           IMAGE_ID: '/subscriptions/77f3c458-6e3c-4680-9dcc-168faba5ca00/resourceGroups/testrvr2/providers/Microsoft.Compute/galleries/galleryrvr001/images/myImage/versions/3.0.1'
     
     
         - name: Deploy Azure Image Builder Infrastructure

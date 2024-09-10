@@ -79,6 +79,9 @@
         "value": "#{IMAGE_ID}#"
     },"artifactsLocation": {
         "value": "https://storagervr0012.blob.core.windows.net/iac/"
+    },
+    "AADJoin": {
+        "value": "true"
     }
   }
 }

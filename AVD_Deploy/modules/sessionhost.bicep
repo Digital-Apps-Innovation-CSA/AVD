@@ -65,6 +65,8 @@ param imageId string
 @description('artifactsLocation for custom script extension')
 param artifactsLocation string
 
+param AADJoin bool = true
+
 // Connecting the Session Hosts to the right Hostpool with following information. Needed for the AVD agent.
 
 resource hostPoolToken 'Microsoft.DesktopVirtualization/hostPools@2021-01-14-preview' existing = {
@@ -154,11 +156,26 @@ resource domainjoinsessionhosts 'Microsoft.Compute/virtualMachines/extensions@20
   name: '${sessionHosts[i].name}/JoinDomain'
   location: location
   tags: tags
-  properties: {
+  properties:  AADJoin ? {
     publisher: 'Microsoft.Azure.ActiveDirectory'
     type: 'AADLoginForWindows'
     typeHandlerVersion: '1.0'
     autoUpgradeMinorVersion: true
+  } : {
+    publisher: 'Microsoft.Compute'
+    type: 'JsonADDomainExtension'
+    typeHandlerVersion: '1.3'
+    autoUpgradeMinorVersion: true
+    settings: {
+      name: domain
+      ouPath: ouPath
+      user: domainjoinaccount
+      restart: true
+      options: domainJoinOptions
+    }
+    protectedSettings: {
+      password: domainjoinaccountpassword
+    }
   }
   dependsOn: [
     sessionHosts[i]
