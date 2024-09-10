@@ -8,7 +8,7 @@ on:
 
 env:
   Image_RG: testrvr2
-  Template_Name: templatervr
+  Template_Name: TemplateImgRVR
   Host_RG: newavd
   Host_Pool: hp-m2cavd
   VM_RG: newavd
