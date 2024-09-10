@@ -18,9 +18,9 @@ jobs:
     - name: Deploy Azure Image Builder Infrastructure
       run: |
           az deployment group create \
-                    --template-file ./AVD/mainsessionhosts.bicep \
+                    --template-file ./AVD_Deploy/mainsessionhosts.bicep \
                     --resource-group newavd \
-                    --parameters ./AVD/parameterssessionhosts.jsonc
+                    --parameters ./AVD_Deploy/parameterssessionhosts.jsonc
                     
 #az deployment group create --resource-group newavd --template-file ./mainsessionhosts.bicep --parameters ./parameterssessionhosts.jsonc --name "DeploySessionHosts_fdsfds"
 
