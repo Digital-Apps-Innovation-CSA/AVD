@@ -64,11 +64,11 @@ param ouPath string
 @description('Resource Group Name for identity scope')
 param miResourceGroupName string
 
-@description('Resource Group Name for identity scope')
+@description('hostToken for the Session Hosts')
 param hostToken string
 
 
-module sessionhosts 'modules/sessionhost.bicep' = {
+module sessionhosts './modules/sessionhost.bicep' = {
   name: 'sessionhosts-${time}'
   params: {
     location: location
