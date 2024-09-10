@@ -17,9 +17,9 @@ jobs:
   
     - uses: cschleiden/replace-tokens@v1
       with:
-       tokenPrefix: '{#'
-       tokenSuffix: '#}'
-       files: '["**/*.jsonc"]'
+       tokenPrefix: '#{'
+       tokenSuffix: '}#'
+       files: './AVD_Deploy/parameterssessionhosts.jsonc'
     - name: Deploy Azure Image Builder Infrastructure
       run: |
           cat ./AVD_Deploy/parameterssessionhosts.jsonc

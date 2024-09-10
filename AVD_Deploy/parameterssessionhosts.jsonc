@@ -67,7 +67,7 @@
     },
 
     "vnetId": {
-        "value": "{#VNETID#}"
+        "value": "#{VNETID}#"
     },
     "miResourceGroupName": {
         "value": "newavd"
