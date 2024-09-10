@@ -35,8 +35,10 @@ jobs:
   ImageBuilderRun:
     needs: ImageBuilderDeploy
     runs-on: ubuntu-latest
+    outputs:
+      output1: ${{ steps.run.outputs.IMAGE_ID }}
     env:
-      IMG: ${{ needs.ImageBuilderDeploy.outputs.output1 }}
+      IMAGE_ID: ${{ needs.ImageBuilderDeploy.outputs.output1 }}
     steps:   
     - uses: actions/checkout@v4
     - name: Azure login
@@ -45,16 +47,18 @@ jobs:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
         
     - name: 'Run Azure Image Builder'
+      id: run
       run: |
           az image builder show -n $Template_Name -g $Image_RG
-          echo $IMG
+          echo "IMAGE_ID=$IMAGE_ID" >> "$GITHUB_OUTPUT"
 #          az image builder run -n $Template_Name -g $Image_RG --no-wait --verbose
 #          az image builder wait -n $Template_Name -g $Image_RG --custom "lastRunStatus.runState!='Running'" --verbose
 
   VmCreation:
-    needs: [ImageBuilderDeploy, ImageBuilderRun]
+    needs: [ImageBuilderRun]
     runs-on: ubuntu-latest
-  
+    env:
+      IMG: ${{ needs.ImageBuilderRun.outputs.output1 }}
     steps:   
         - uses: actions/checkout@v4
         - name: Azure login
@@ -87,7 +91,7 @@ jobs:
            DOMAINJOINACCOUNTPASSWORD : ${{ secrets.DOMAINJOINACCOUNTPASSWORD }}
            LOCALADMINUSERNAME: ${{ secrets.LOCALADMINUSERNAME }}
            LOCALADMINUSERPASSWORD: ${{ secrets.LOCALADMINUSERPASSWORD }}
-           IMAGE_ID: '/subscriptions/77f3c458-6e3c-4680-9dcc-168faba5ca00/resourceGroups/testrvr2/providers/Microsoft.Compute/galleries/galleryrvr001/images/myImage/versions/3.0.1'
+           IMAGE_ID: ${{ env.IMG }}
     
     
         - name: Deploy Azure Image Builder Infrastructure
