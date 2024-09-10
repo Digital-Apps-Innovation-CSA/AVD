@@ -34,7 +34,8 @@ jobs:
   ImageBuilderRun:
     needs: ImageBuilderDeploy
     runs-on: ubuntu-latest
-   
+    env:
+      IMG: ${{ needs.ImageBuilderDeploy.outputs.output1 }}
     steps:   
     - uses: actions/checkout@v4
     - name: Azure login
@@ -45,14 +46,15 @@ jobs:
     - name: 'Run Azure Image Builder'
       run: |
           az image builder show -n $Template_Name -g $Image_RG
+          echo $IMG
 #          az image builder run -n $Template_Name -g $Image_RG --no-wait --verbose
 #          az image builder wait -n $Template_Name -g $Image_RG --custom "lastRunStatus.runState!='Running'" --verbose
 
   VmCreation:
     needs: [ImageBuilderDeploy, ImageBuilderRun]
     runs-on: ubuntu-latest
+  
     steps:   
-
         - uses: actions/checkout@v4
         - name: Azure login
           uses: azure/login@v2

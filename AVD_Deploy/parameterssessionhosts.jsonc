@@ -81,7 +81,7 @@
         "value": "https://storagervr0012.blob.core.windows.net/iac/"
     },
     "AADJoin": {
-        "value": "true"
+        "value": true
     }
   }
 }
