@@ -59,6 +59,7 @@ var avSetSKU = 'Aligned'
 @description('Resource Group Name for identity scope')
 param hostToken string
 
+param imageId string
 
 // Connecting the Session Hosts to the right Hostpool with following information. Needed for the AVD agent.
 
@@ -121,10 +122,7 @@ resource sessionHosts 'Microsoft.Compute/virtualMachines@2023-09-01' = [for i in
     }
     storageProfile: {
       imageReference: {
-        publisher: 'MicrosoftWindowsDesktop'
-        offer: 'Windows-11'
-        sku: 'win11-23h2-avd'
-        version: 'latest'
+       id: imageId
       }
       osDisk: {
         createOption: 'FromImage'

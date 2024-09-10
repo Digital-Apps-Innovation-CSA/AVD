@@ -67,6 +67,8 @@ param miResourceGroupName string
 @description('hostToken for the Session Hosts')
 param hostToken string
 
+@secure()
+param imageId string
 
 module sessionhosts './modules/sessionhost.bicep' = {
   name: 'sessionhosts-${time}'
@@ -88,5 +90,6 @@ module sessionhosts './modules/sessionhost.bicep' = {
     VMsize: VMsize
     vnetId: vnetId
     hostToken: hostToken
+    imageId: imageId
   }
 }

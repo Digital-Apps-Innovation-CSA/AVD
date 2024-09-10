@@ -74,6 +74,9 @@
     },
     "hostToken":{ 
         "value": "#{HOST_TOKEN}#"
+    },
+    "imageId": {
+        "value": "#{IMAGE_ID}#"
     }
   }
 }

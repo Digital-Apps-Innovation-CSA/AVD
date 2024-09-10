@@ -5,9 +5,16 @@ on:
   push:
      branches:
         - develop
+
+env:
+  Image_RG: testrvr2
+  Template_Name: templatervr
+
 jobs:
   ImageBuilderDeploy:
     runs-on: ubuntu-latest
+    outputs:
+      IMAGE_ID: ${{ steps.deploy.outputs.IMAGE_ID }}
     steps:   
     - uses: actions/checkout@v4
     - name: Azure login
@@ -16,12 +23,10 @@ jobs:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
     - name: Deploy Azure Image Builder Infrastructure
+      id: deploy
       run: |
-          az deployment group create \
-                    --template-file ./CustomImage/main.bicep \
-                    --resource-group testrvr2 \
-                    --parameters ./CustomImage/parameters.storageplusvgInfo.json
-
+          IMAGE_ID=$(az deployment group create --template-file ./CustomImage/main.bicep --resource-group $Image_RG --parameters ./CustomImage/parameters.storageplusvgInfo.json --query properties.outputs.IMAGE_ID.value)
+          echo "IMAGE_ID=$IMAGE_ID" >> "$GITHUB_OUTPUT"
   #ImageBuilderRun:
   #  needs: ImageBuilderDeploy
   #  runs-on: ubuntu-latest
@@ -35,5 +40,54 @@ jobs:
         
   #  - name: 'Run Azure Image Builder'
   #    run: |
-  #        az image builder run -n templatervr -g testrvr2 --no-wait --verbose
-  #        az image builder wait -n templatervr -g testrvr2 --custom "lastRunStatus.runState!='Running'" --verbose
+  #        az image builder run -n $Template_Name -g $Image_RG --no-wait --verbose
+  #        az image builder wait -n $Template_Name -g $Image_RG --custom "lastRunStatus.runState!='Running'" --verbose
+
+  VmCreationRun:
+    needs: ImageBuilderDeploy
+    runs-on: ubuntu-latest
+    steps:   
+
+        - uses: actions/checkout@v4
+        - name: Azure login
+          uses: azure/login@v2
+          with:
+            creds: ${{ secrets.AZURE_CREDENTIALS }}
+      
+        - name: Get Token
+          id: gettoken
+          run: |
+                 az desktopvirtualization hostpool update \
+                 --name hp-m2cavd \
+                 --resource-group newavd \
+                 --registration-info expiration-time=$(date -d '+24 hours' --iso-8601=ns) registration-token-operation="Update"
+      
+                  tokenhp=$(az desktopvirtualization hostpool retrieve-registration-token --name hp-m2cavd --resource-group newavd --query token --output tsv)
+      
+                  echo "tokenhp=$tokenhp" >> "$GITHUB_OUTPUT"
+    
+        - uses: cschleiden/replace-tokens@v1
+          with:
+           tokenPrefix: '#{'
+           tokenSuffix: '}#'
+           files: './AVD_Deploy/parameterssessionhosts.jsonc'
+          env:
+           HOST_TOKEN: ${{ steps.gettoken.outputs.tokenhp }}
+           VNETID: ${{ secrets.VNETID }}
+           DOMAIN: ${{ secrets.DOMAIN }}
+           DOMAINJOINACCOUNT : ${{ secrets.DOMAINJOINACCOUNT }}
+           DOMAINJOINACCOUNTPASSWORD : ${{ secrets.DOMAINJOINACCOUNTPASSWORD }}
+           LOCALADMINUSERNAME: ${{ secrets.LOCALADMINUSERNAME }}
+           LOCALADMINUSERPASSWORD: ${{ secrets.LOCALADMINUSERPASSWORD }}
+           IMAGE_ID: ${{ needs.ImageBuilderDeploy.outputs.IMAGE_ID }}
+    
+    
+        
+        
+        - name: Deploy Azure Image Builder Infrastructure
+          run: |
+              az deployment group create \
+                        --template-file ./AVD_Deploy/mainsessionhosts.bicep \
+                        --resource-group newavd \
+                        --parameters ./AVD_Deploy/parameterssessionhosts.jsonc
+    

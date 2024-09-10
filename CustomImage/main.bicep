@@ -77,3 +77,5 @@ resource azImageTemplate 'Microsoft.VirtualMachineImages/imageTemplates@2022-07-
     }
   }
 }
+
+output IMAGE_ID string = '${azImage.id}/versions/${imageversion}'
