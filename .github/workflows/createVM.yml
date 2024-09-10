@@ -17,8 +17,8 @@ jobs:
   
     - uses: cschleiden/replace-tokens@v1
       with:
-       tokenPrefix: '{##'
-       tokenSuffix: '##}'
+       tokenPrefix: '{#'
+       tokenSuffix: '#}'
        files: '["**/*.jsonc"]'
     - name: Deploy Azure Image Builder Infrastructure
       run: |
