@@ -1,0 +1,127 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+
+    // General parameters used for multiple resources
+
+    "name": {
+        "value": "m2cavd"
+    },
+
+    "tags": {
+        "value": {
+            "M2C": "AVD",
+            "Environment": "TEST"
+        }
+    },
+
+    "managedIdentityName": {
+        "value": "m2cmanid"
+    },
+
+    "hostPoolType": {
+        "value": "Pooled"
+    },
+
+
+    // VNET parameters
+
+    "vnetAddressPrefix": {
+        "value": "10.5.0.0/16"
+    },
+
+    "SubnetPrefix": {
+        "value": "10.5.0.0/24"
+    },
+
+    "dnsServer": {
+        "value": "10.1.0.4"
+    },
+
+    // VNET Peering parameters (Optional)
+
+    "vnetpeeringdeploy":{
+        "value": true
+    },
+
+    "hubVnetName": {
+        "value": "M2C-RG-ADDS-vnet"
+    },
+
+    "hubVnetRgName": {
+        "value": "M2C-RG-ADDS"
+    },
+
+    // Hostpool parameters
+
+    "maxSessionLimit": {
+        "value": 5
+    },
+
+    // Desktop Application Group parameters
+
+    "friendlyNameApg": {
+        "value": "M2C-DAPG"
+    },
+
+    // Scalingplan parameters
+
+    "scalingplandeploy":{
+        "value": true
+    },
+
+    "exclusionTag": {
+        "value": "DoNotScale"
+    },
+
+    "friendlyNameSC": {
+        "value": "Scalingplan for Pooled AVD - Test"
+    },
+
+    "nameSchedule": {
+        "value": "weeklyschedule"
+    },
+
+    "scalingPlanEnabled": {
+        "value": true
+    },
+
+    "rampDownNotificationMessage": {
+        "value": "This session will be closed in about 5 minutes, please save all your work."
+    },
+
+    // Workspace parameters
+
+    "descriptionws": {
+        "value": "Workspace for M2C employees"
+    },
+
+    "friendlyNameWs": {
+        "value": "M2C Workspace"
+    },
+
+    // Storage account parameters (Be aware that Premium storage is billed for the provisioned storage, not the used storage)
+
+    "storagedeploy":{
+        "value": true
+    },
+
+    "fileShareName": {
+        "value": "fslogix"
+    },
+
+    "shareQuota": {
+        "value": 100
+    },
+
+    // User Managed Identity parameters (The IDs of the roles can be checked at:https://learn.microsoft.com/en-us/azure/role-based-access-control/built-in-roles)
+
+    "roleDefinitionIds": {
+        "value": [
+                "b24988ac-6180-42a0-ab88-20f7382dd24c",
+                "18d7d88d-d35e-4fb5-a5c3-7773c20a72d9"
+        ]
+    }
+  }
+}

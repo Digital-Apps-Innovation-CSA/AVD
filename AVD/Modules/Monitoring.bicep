@@ -1,119 +1,47 @@
-//***********************************************************************************************************************
-//Parameters - All
-param logworkspaceSub string
-param logworkspaceResourceGroup string
-param logworkspaceName string
 
-param hostpoolName string
-param workspaceName string
-param appgroupName string
+@description('Location of the Log Analytics Workspace')
+param location string = resourceGroup().location
 
-//***********************************************************************************************************************
-//Variables - All
-var logworkspaceId = '/subscriptions/${logworkspaceSub}/resourcegroups/${logworkspaceResourceGroup}/providers/microsoft.operationalinsights/workspaces/${logworkspaceName}'
+@description('Mame of log Analytics Workspace')
+param logAnalyticsWorkspaceName string = 'la-${uniqueString(resourceGroup().id)}'
 
-//***********************************************************************************************************************
-//Resources - Get existing AVD components (Host Pool, Workspace)
-resource hostPool 'Microsoft.DesktopVirtualization/hostPools@2021-07-12' existing = {
-  name: hostpoolName
+var vmInsights = {
+  name: 'VMInsights(${logAnalyticsWorkspaceName})'
+  galleryName: 'VMInsights'
 }
 
-resource appGroup 'Microsoft.DesktopVirtualization/applicationGroups@2021-07-12' existing = {
-  name: appgroupName
-}
+var environmentName = 'Production'
+var costCenterName = 'AVD'
 
-resource workspace 'Microsoft.DesktopVirtualization/workspaces@2021-07-12' existing = {
-  name: workspaceName
-}
-
-//***********************************************************************************************************************
-//Resources - AVD Diagnostic Settings (Host Pool, Workspace, Application Group)
-resource hostpoolDiagName 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
-  name: 'hostpool-diag'
-  scope: hostPool
-  properties: {
-    workspaceId: logworkspaceId
-    logs: [
-      {
-        category: 'Checkpoint'
-        enabled: true
-      }
-      {
-        category: 'Error'
-        enabled: true
-      }
-      {
-        category: 'Management'
-        enabled: true
-      }
-      {
-        category: 'Connection'
-        enabled: true
-      }
-      {
-        category: 'HostRegistration'
-        enabled: true
-      }
-      {
-        category: 'AgentHealthStatus'
-        enabled: true
-      }
-      {
-        category: 'NetworkData'
-        enabled: true
-      }
-      {
-        category: 'SessionHostManagement'
-        enabled: true
-      }
-    ]
+resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2023-09-01' = {
+  name: logAnalyticsWorkspaceName
+  location: location
+  tags: {
+    Environment: environmentName
+    CostCenter: costCenterName
   }
+  properties: any({
+    retentionInDays: 90
+    features: {
+      searchVersion: 1
+    }
+    sku: {
+      name: 'PerGB2018'
+    }
+  })
 }
 
-resource workspaceDiagName 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
-  name: 'workspacepool-diag'
-  scope: workspace
+
+resource solutionsVMInsights 'Microsoft.OperationsManagement/solutions@2015-11-01-preview' = {
+  name: vmInsights.name
+  location: location
   properties: {
-    workspaceId: logworkspaceId
-    logs: [
-      {
-        category: 'Checkpoint'
-        enabled: true
-      }
-      {
-        category: 'Error'
-        enabled: true
-      }
-      {
-        category: 'Management'
-        enabled: true
-      }
-      {
-        category: 'Feed'
-        enabled: true
-      }
-    ]
+    workspaceResourceId: logAnalyticsWorkspace.id
   }
-}
-
-resource appGroupDiagName 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
-  name: 'appgroup-diag'
-  scope: appGroup
-  properties: {
-    workspaceId: logworkspaceId
-    logs: [
-      {
-        category: 'Checkpoint'
-        enabled: true
-      }
-      {
-        category: 'Error'
-        enabled: true
-      }
-      {
-        category: 'Management'
-        enabled: true
-      }
-    ]
+  plan: {
+    name: vmInsights.name
+    publisher: 'Microsoft'
+    product: 'OMSGallery/${vmInsights.galleryName}'
+    promotionCode: ''
   }
 }

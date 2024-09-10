@@ -1,0 +1,79 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+
+    // General parameters used for multiple resources
+
+    "name": {
+        "value": "m2cavd"
+    },
+
+    "tags": {
+        "value": {
+            "M2C": "AVD",
+            "Environment": "TEST"
+        }
+    },
+
+    "managedIdentityName": {
+        "value": "m2cmanid"
+    },
+
+    "hostPoolType": {
+        "value": "Pooled"
+    },
+
+
+    // Session host parameters
+
+    "domain": {
+        "value": "m2c.local"
+    },
+
+    "domainjoinaccount": {
+        "value": "domainjoin@m2c.local"
+    },
+
+    "domainjoinaccountpassword": {
+        "value": "YourPasswordHere!"
+    },
+
+    "localAdminUserName": {
+        "value": "adminavd"
+    },
+
+    "localAdminUserPassword": {
+        "value": "YourPasswordHere!"
+    },
+
+    "ouPath": {
+        "value": "OU=Pooled Desktop,OU=AVD,OU=Devices,OU=M2C,DC=m2c,DC=local"
+    },
+
+    "sessionhostscount": {
+        "value": 2
+    },
+
+    "subnetName": {
+        "value": "sn-m2cavd"
+    },
+
+    "vmPrefix": {
+        "value": "m2cavd"
+    },
+    "VMsize": {
+        "value": "Standard_D2as_v5"
+    },
+
+    "vnetId": {
+        "value": "/subscriptions/77f3c458-6e3c-4680-9dcc-168faba5ca00/resourceGroups/newavd/providers/Microsoft.Network/virtualNetworks/vn-m2cavd"
+    },
+    "miResourceGroupName": {
+        "value": "newavd"
+    },
+    "hostToken":{ 
+        "value": "eyJhbGciOiJSUzI1NiIsImtpZCI6IjdDRjJCQTUzNjY3QjA4RTQzRjA0MDkyODNDMTk0NzhGNDc4OEYxMDYiLCJ0eXAiOiJKV1QifQ.eyJSZWdpc3RyYXRpb25JZCI6ImI3NDk4ZjI1LTc4NTItNGNkZC05ZDhlLWExM2UxYzRkNGEzYSIsIkJyb2tlclVyaSI6Imh0dHBzOi8vcmRicm9rZXItZy11cy1yMC53dmQubWljcm9zb2Z0LmNvbS8iLCJEaWFnbm9zdGljc1VyaSI6Imh0dHBzOi8vcmRkaWFnbm9zdGljcy1nLXVzLXIwLnd2ZC5taWNyb3NvZnQuY29tLyIsIkVuZHBvaW50UG9vbElkIjoiMDgzMzdkYzMtODI3MC00ZDk1LTk5OGItOGExYmNmYzA5Nzk1IiwiR2xvYmFsQnJva2VyVXJpIjoiaHR0cHM6Ly9yZGJyb2tlci53dmQubWljcm9zb2Z0LmNvbS8iLCJHZW9ncmFwaHkiOiJVUyIsIkdsb2JhbEJyb2tlclJlc291cmNlSWRVcmkiOiJodHRwczovLzA4MzM3ZGMzLTgyNzAtNGQ5NS05OThiLThhMWJjZmMwOTc5NS5yZGJyb2tlci53dmQubWljcm9zb2Z0LmNvbS8iLCJCcm9rZXJSZXNvdXJjZUlkVXJpIjoiaHR0cHM6Ly8wODMzN2RjMy04MjcwLTRkOTUtOTk4Yi04YTFiY2ZjMDk3OTUucmRicm9rZXItZy11cy1yMC53dmQubWljcm9zb2Z0LmNvbS8iLCJEaWFnbm9zdGljc1Jlc291cmNlSWRVcmkiOiJodHRwczovLzA4MzM3ZGMzLTgyNzAtNGQ5NS05OThiLThhMWJjZmMwOTc5NS5yZGRpYWdub3N0aWNzLWctdXMtcjAud3ZkLm1pY3Jvc29mdC5jb20vIiwiQUFEVGVuYW50SWQiOiI2MTdiYmUzYS01MDIwLTQ5MDItOWJhZC1hYTU2ZTYzOWExYjQiLCJuYmYiOjE3MjU5MTU2ODcsImV4cCI6MTcyNjA4ODQ4NSwiaXNzIjoiUkRJbmZyYVRva2VuTWFuYWdlciIsImF1ZCI6IlJEbWkifQ.tPUXamE3WZM7HlbJ1hGs8e4V1uL1urZ-V9Udsbg9W6ZNc_aap6mZxFtr43e1msPCC6zEuwEh2F5VmeaWTyZdZCylz4Xm76dV_dD2WBdWf54tujchMmIXTufZ7_FX8azBlDa4GNM46X3VhsdiYliYhH6NIom8atL6Nxtl3txZlOehd4_k9f0MtqQ4rYA4uHJo5n0jYgswdxaWlA7PaCO_YavMznxui4CSXqpqOI0bQXFdvlak0QZC0HaMKe49I03snJFF0wNBb2dLQOYNrlCvU1ufyz1g1AwayDcMyK1kRrMKf0LZ0-NK8-GiyEsAJfoDfYcezuhR4JwibssX1SKETQ"
+    }
+  }
+}

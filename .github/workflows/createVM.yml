@@ -1,4 +1,4 @@
-name: Azure Image Builder - Build and Publish Image Template
+name: Create VM
 
 on:
   workflow_dispatch:
@@ -18,9 +18,11 @@ jobs:
     - name: Deploy Azure Image Builder Infrastructure
       run: |
           az deployment group create \
-                    --template-file ./AVD/main.bicep \
-                    --resource-group AVD \
+                    --template-file ./AVD/mainsessionhosts.bicep \
+                    --resource-group newavd \
+                    --parameters ./AVD/parameterssessionhosts.jsonc
                     
+#az deployment group create --resource-group newavd --template-file ./mainsessionhosts.bicep --parameters ./parameterssessionhosts.jsonc --name "DeploySessionHosts_fdsfds"
 
   #ImageBuilderRun:
   #  needs: ImageBuilderDeploy
