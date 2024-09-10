@@ -70,6 +70,9 @@ param hostToken string
 @secure()
 param imageId string
 
+@description('artifactsLocation for custom script extension')
+param artifactsLocation string
+
 module sessionhosts './modules/sessionhost.bicep' = {
   name: 'sessionhosts-${time}'
   params: {
@@ -91,5 +94,6 @@ module sessionhosts './modules/sessionhost.bicep' = {
     vnetId: vnetId
     hostToken: hostToken
     imageId: imageId
+    artifactsLocation: artifactsLocation
   }
 }

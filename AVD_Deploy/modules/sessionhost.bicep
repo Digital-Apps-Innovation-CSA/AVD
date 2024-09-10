@@ -56,10 +56,14 @@ param miResourceGroupName string
 
 var avSetSKU = 'Aligned'
 
-@description('Resource Group Name for identity scope')
+@description('Host Token for the Session Hosts')
 param hostToken string
 
+@description('Image ID for the Session Hosts')
 param imageId string
+
+@description('artifactsLocation for custom script extension')
+param artifactsLocation string
 
 // Connecting the Session Hosts to the right Hostpool with following information. Needed for the AVD agent.
 
@@ -161,6 +165,7 @@ resource domainjoinsessionhosts 'Microsoft.Compute/virtualMachines/extensions@20
   ]
 }]
 
+
 resource avdagentsessionhosts 'Microsoft.Compute/virtualMachines/extensions@2023-09-01' = [for i in range(0, sessionhostscount): {
   name: '${sessionHosts[i].name}/AddSessionHost'
   location: location
@@ -209,4 +214,31 @@ resource azuremonitoringagent 'Microsoft.Compute/virtualMachines/extensions@2021
       }
     }
   }
+}]
+
+//***********************************************************************************************************************
+//Resources - Custom Script Extension
+
+resource languagefix 'Microsoft.Compute/virtualMachines/extensions@2021-11-01' =  [for i in range(0, sessionhostscount): if (!empty(artifactsLocation))  {
+  name: '${sessionHosts[i].name}/CustomScriptExtension'
+  location: location
+  properties: {
+    publisher: 'Microsoft.Compute'
+    type: 'CustomScriptExtension'
+    typeHandlerVersion: '1.10'
+    autoUpgradeMinorVersion: true
+    settings: {
+      fileUris: [
+        '${artifactsLocation}languagescript.ps1'
+        '${artifactsLocation}UKRegion.xml'
+      ]
+    }
+    protectedSettings: {
+      commandToExecute: 'powershell.exe -ExecutionPolicy Bypass -File languagescript.ps1'
+    }
+  }
+  dependsOn: [
+    domainjoinsessionhosts[i]
+    avdagentsessionhosts[i]
+  ]
 }]
