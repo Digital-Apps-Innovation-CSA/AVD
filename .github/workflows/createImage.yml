@@ -9,6 +9,9 @@ on:
 env:
   Image_RG: testrvr2
   Template_Name: templatervr
+  Host_RG: newavd
+  Host_Pool: hp-m2cavd
+  VM_RG: newavd
 
 jobs:
   ImageBuilderDeploy:
@@ -58,11 +61,11 @@ jobs:
           id: gettoken
           run: |
                  az desktopvirtualization hostpool update \
-                 --name hp-m2cavd \
-                 --resource-group newavd \
+                 --name $Host_Pool \
+                 --resource-group $Host_RG \
                  --registration-info expiration-time=$(date -d '+24 hours' --iso-8601=ns) registration-token-operation="Update"
       
-                  tokenhp=$(az desktopvirtualization hostpool retrieve-registration-token --name hp-m2cavd --resource-group newavd --query token --output tsv)
+                  tokenhp=$(az desktopvirtualization hostpool retrieve-registration-token --name $Host_Pool --resource-group $Host_RG --query token --output tsv)
       
                   echo "tokenhp=$tokenhp" >> "$GITHUB_OUTPUT"
     
@@ -88,6 +91,6 @@ jobs:
           run: |
               az deployment group create \
                         --template-file ./AVD_Deploy/mainsessionhosts.bicep \
-                        --resource-group newavd \
+                        --resource-group $VM_RG \
                         --parameters ./AVD_Deploy/parameterssessionhosts.jsonc
     
