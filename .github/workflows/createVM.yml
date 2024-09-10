@@ -15,13 +15,30 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
   
+    - name: Get Token
+      run: |
+             az desktopvirtualization hostpool update \
+             --name hp-m2cavd \
+             --resource-group newavd \
+             --registration-info expiration-time=$(date -d '+24 hours' --iso-8601=ns) registration-token-operation="Update"
+  
+             $tokenhp=$(az desktopvirtualization hostpool retrieve-registration-token \
+              --name hp-m2cavd \
+              --resource-group newavd \
+              --query token --output tsv)
+  
+              echo $tokenhp : $tokenhp
+
     - uses: cschleiden/replace-tokens@v1
       with:
        tokenPrefix: '#{'
        tokenSuffix: '}#'
        files: './AVD_Deploy/parameterssessionhosts.jsonc'
+
+
     - name: Deploy Azure Image Builder Infrastructure
       run: |
+          echo ${{ env.tokenhp }}
           cat ./AVD_Deploy/parameterssessionhosts.jsonc
     
     #- name: Deploy Azure Image Builder Infrastructure
