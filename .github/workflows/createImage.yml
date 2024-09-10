@@ -30,24 +30,26 @@ jobs:
       run: |
           IMAGE_ID=$(az deployment group create --template-file ./CustomImage/main.bicep --resource-group $Image_RG --parameters ./CustomImage/parameters.storageplusvgInfo.json --query properties.outputs.IMAGE_ID.value)
           echo "IMAGE_ID=$IMAGE_ID" >> "$GITHUB_OUTPUT"
-  #ImageBuilderRun:
-  #  needs: ImageBuilderDeploy
-  #  runs-on: ubuntu-latest
+
+  ImageBuilderRun:
+    needs: ImageBuilderDeploy
+    runs-on: ubuntu-latest
    
-  #  steps:   
-  #  - uses: actions/checkout@v4
-  #  - name: Azure login
-  #    uses: azure/login@v2
-  #    with:
-  #      creds: ${{ secrets.AZURE_CREDENTIALS }}
+    steps:   
+    - uses: actions/checkout@v4
+    - name: Azure login
+      uses: azure/login@v2
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
         
-  #  - name: 'Run Azure Image Builder'
-  #    run: |
-  #        az image builder run -n $Template_Name -g $Image_RG --no-wait --verbose
-  #        az image builder wait -n $Template_Name -g $Image_RG --custom "lastRunStatus.runState!='Running'" --verbose
+    - name: 'Run Azure Image Builder'
+      run: |
+          az image builder show -n $Template_Name -g $Image_RG --no-wait --verbose
+#          az image builder run -n $Template_Name -g $Image_RG --no-wait --verbose
+#          az image builder wait -n $Template_Name -g $Image_RG --custom "lastRunStatus.runState!='Running'" --verbose
 
   VmCreationRun:
-    needs: ImageBuilderDeploy
+    needs: [ImageBuilderDeploy, ImageBuilderRun]
     runs-on: ubuntu-latest
     steps:   
 
@@ -87,10 +89,6 @@ jobs:
     
         
         
-        - name: Deploy Azure Image Builder Infrastructure
+        - name: Clean up Template
           run: |
-              az deployment group create \
-                        --template-file ./AVD_Deploy/mainsessionhosts.bicep \
-                        --resource-group $VM_RG \
-                        --parameters ./AVD_Deploy/parameterssessionhosts.jsonc
-    
+              az image builder delete -n $Template_Name -g $Image_RG --verbose
