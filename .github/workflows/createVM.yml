@@ -14,13 +14,22 @@ jobs:
       uses: azure/login@v2
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
-
+  
+    - uses: cschleiden/replace-tokens@v1
+      with:
+       tokenPrefix: '{##'
+       tokenSuffix: '##}'
+       files: '["**/*.jsonc"]'
     - name: Deploy Azure Image Builder Infrastructure
       run: |
-          az deployment group create \
-                    --template-file ./AVD_Deploy/mainsessionhosts.bicep \
-                    --resource-group newavd \
-                    --parameters ./AVD_Deploy/parameterssessionhosts.jsonc
+          cat ./AVD_Deploy/parameterssessionhosts.jsonc
+    
+    #- name: Deploy Azure Image Builder Infrastructure
+    #  run: |
+    #      az deployment group create \
+    #                --template-file ./AVD_Deploy/mainsessionhosts.bicep \
+    #                --resource-group newavd \
+    #                --parameters ./AVD_Deploy/parameterssessionhosts.jsonc
                     
 #az deployment group create --resource-group newavd --template-file ./mainsessionhosts.bicep --parameters ./parameterssessionhosts.jsonc --name "DeploySessionHosts_fdsfds"
 

@@ -67,7 +67,7 @@
     },
 
     "vnetId": {
-        "value": "/subscriptions/77f3c458-6e3c-4680-9dcc-168faba5ca00/resourceGroups/newavd/providers/Microsoft.Network/virtualNetworks/vn-m2cavd"
+        "value": "{#VNETID#}"
     },
     "miResourceGroupName": {
         "value": "newavd"
