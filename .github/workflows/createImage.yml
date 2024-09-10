@@ -29,6 +29,7 @@ jobs:
       id: deploy
       run: |
           IMAGE_ID=$(az deployment group create --template-file ./CustomImage/main.bicep --resource-group $Image_RG --parameters ./CustomImage/parameters.storageplusvgInfo.json --query properties.outputs.IMAGE_ID.value)
+          echo $IMAGE_ID
           echo "IMAGE_ID=$IMAGE_ID" >> "$GITHUB_OUTPUT"
 
   ImageBuilderRun:
