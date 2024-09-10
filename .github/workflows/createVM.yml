@@ -34,34 +34,20 @@ jobs:
        files: './AVD_Deploy/parameterssessionhosts.jsonc'
       env:
        HOST_TOKEN: ${{ steps.gettoken.outputs.tokenhp }}
+       VNETID: ${{ secrets.VNETID }}
+       DOMAIN: ${{ secrets.DOMAIN }}
+       DOMAINJOINACCOUNT : ${{ secrets.DOMAINJOINACCOUNT }}
+       DOMAINJOINACCOUNTPASSWORD : ${{ secrets.DOMAINJOINACCOUNTPASSWORD }}
+       LOCALADMINUSERNAME: ${{ secrets.LOCALADMINUSERNAME }}
+       LOCALADMINUSERPASSWORD: ${{ secrets.LOCALADMINUSERPASSWORD }}
 
 
+    
+    
     - name: Deploy Azure Image Builder Infrastructure
       run: |
-          echo "numberis ${{ steps.gettoken.outputs.tokenhp }}"
-          cat ./AVD_Deploy/parameterssessionhosts.jsonc
-    
-    #- name: Deploy Azure Image Builder Infrastructure
-    #  run: |
-    #      az deployment group create \
-    #                --template-file ./AVD_Deploy/mainsessionhosts.bicep \
-    #                --resource-group newavd \
-    #                --parameters ./AVD_Deploy/parameterssessionhosts.jsonc
+          az deployment group create \
+                    --template-file ./AVD_Deploy/mainsessionhosts.bicep \
+                    --resource-group newavd \
+                    --parameters ./AVD_Deploy/parameterssessionhosts.jsonc
                     
-#az deployment group create --resource-group newavd --template-file ./mainsessionhosts.bicep --parameters ./parameterssessionhosts.jsonc --name "DeploySessionHosts_fdsfds"
-
-  #ImageBuilderRun:
-  #  needs: ImageBuilderDeploy
-  #  runs-on: ubuntu-latest
-   
-  #  steps:   
-  #  - uses: actions/checkout@v4
-  #  - name: Azure login
-  #    uses: azure/login@v2
-  #    with:
-  #      creds: ${{ secrets.AZURE_CREDENTIALS }}
-        
-  #  - name: 'Run Azure Image Builder'
-  #    run: |
-  #        az image builder run -n templatervr -g testrvr2 --no-wait --verbose
-  #        az image builder wait -n templatervr -g testrvr2 --custom "lastRunStatus.runState!='Running'" --verbose

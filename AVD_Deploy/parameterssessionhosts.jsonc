@@ -28,23 +28,23 @@
     // Session host parameters
 
     "domain": {
-        "value": "m2c.local"
+        "value": "#{DOMAIN}#"
     },
 
     "domainjoinaccount": {
-        "value": "domainjoin@m2c.local"
+        "value": "#{DOMAINJOINACCOUNT}#"
     },
 
     "domainjoinaccountpassword": {
-        "value": "YourPasswordHere!"
+        "value": "#{DOMAINJOINACCOUNTPASSWORD#}"
     },
 
     "localAdminUserName": {
-        "value": "adminavd"
+        "value": "#{LOCALADMINUSERNAME}#"
     },
 
     "localAdminUserPassword": {
-        "value": "YourPasswordHere!"
+        "value": "#{LOCALADMINUSERPASSWORD}#"
     },
 
     "ouPath": {
