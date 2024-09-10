@@ -87,7 +87,12 @@ jobs:
            IMAGE_ID: ${{ needs.ImageBuilderDeploy.outputs.IMAGE_ID }}
     
     
-        
+        - name: Deploy Azure Image Builder Infrastructure
+          run: |
+               az deployment group create \
+                         --template-file ./AVD_Deploy/mainsessionhosts.bicep \
+                         --resource-group $VM_RG \
+                         --parameters ./AVD_Deploy/parameterssessionhosts.jsonc        
         
         - name: Clean up Template
           run: |
