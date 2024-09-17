@@ -50,4 +50,5 @@ jobs:
                     --template-file ./AVD_Deploy/mainsessionhosts.bicep \
                     --resource-group newavd \
                     --parameters ./AVD_Deploy/parameterssessionhosts.jsonc
+                    --parameters domainjoinaccountpassword =  ${{ secrets.DOMAINJOINACCOUNTPASSWORD }}
                     
