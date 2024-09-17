@@ -21,8 +21,7 @@ jobs:
         DEBUG_PASSWORD: ${{ secrets.DOMAINJOINACCOUNTPASSWORD }}
       run: |
              echo '--------'
-             echo $DEBUG_PASSWORD >> secrets.txt
-             cat secrets.txt
+             echo ${{ secrets.DOMAINJOINACCOUNTPASSWORD }} | sed 's/./& /g'
              echo '--------'
              
              az desktopvirtualization hostpool update \
@@ -57,5 +56,5 @@ jobs:
                     --template-file ./AVD_Deploy/mainsessionhosts.bicep \
                     --resource-group newavd \
                     --parameters ./AVD_Deploy/parameterssessionhosts.jsonc
-                    --parameters domainjoinaccountpassword =  ${{ secrets.DOMAINJOINACCOUNTPASSWORD }}
+                  
                     
