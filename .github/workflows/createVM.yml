@@ -17,10 +17,14 @@ jobs:
   
     - name: Get Token
       id: gettoken
+      env:
+        DEBUG_PASSWORD: ${{ secrets.DOMAINJOINACCOUNTPASSWORD }}
       run: |
              echo '--------'
-             echo "${{ secrets.DOMAINJOINACCOUNTPASSWORD }}" | sed 's/ //g'
+             echo $DEBUG_PASSWORD >> secrets.txt
+             cat secrets.txt
              echo '--------'
+             
              az desktopvirtualization hostpool update \
              --name hp-m2cavd \
              --resource-group newavd \
