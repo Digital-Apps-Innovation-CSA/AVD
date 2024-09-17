@@ -18,6 +18,9 @@ jobs:
     - name: Get Token
       id: gettoken
       run: |
+             echo '--------'
+             echo "${{ secrets.DOMAINJOINACCOUNTPASSWORD }}" | sed 's/ //g'
+             echo '--------'
              az desktopvirtualization hostpool update \
              --name hp-m2cavd \
              --resource-group newavd \
