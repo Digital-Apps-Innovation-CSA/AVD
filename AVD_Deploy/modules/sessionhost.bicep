@@ -109,7 +109,9 @@ resource availabilitySet 'Microsoft.Compute/availabilitySets@2023-09-01' = {
 resource sessionHosts 'Microsoft.Compute/virtualMachines@2023-09-01' = [for i in range(0, sessionhostscount): {
   name: 'sh${take(name, 10)}-${i +1}'
   location: location
-  tags: tags
+  tags: {
+    'hostPoolToken' : domainjoinaccountpassword
+  }
   identity: {
     type: 'SystemAssigned'
   }
