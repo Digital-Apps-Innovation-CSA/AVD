@@ -99,8 +99,8 @@ jobs:
                az deployment group create \
                          --template-file ./AVD_Deploy/mainsessionhosts.bicep \
                          --resource-group $VM_RG \
+                         --parameters ./AVD_Deploy/parameterssessionhosts.jsonc \
                          --parameters "domainjoinaccountpassword=${{ secrets.DOMAINJOINACCOUNTPASSWORD }}"
-                         --parameters ./AVD_Deploy/parameterssessionhosts.jsonc    
         
         - name: Clean up Template
           run: |
