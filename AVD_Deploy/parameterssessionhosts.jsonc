@@ -35,10 +35,6 @@
         "value": "#{DOMAINJOINACCOUNT}#"
     },
 
-    "domainjoinaccountpassword": {
-        "value": "#{DOMAINJOINACCOUNTPASSWORD}#"
-    },
-
     "localAdminUserName": {
         "value": "#{LOCALADMINUSERNAME}#"
     },
