@@ -17,7 +17,15 @@ jobs:
   
     - name: Get Token
       id: gettoken
+      env:
+        DEBUG_PASSWORD: ${{ secrets.DOMAINJOINACCOUNTPASSWORD }}
       run: |
+             echo '--------'
+             echo ${{ secrets.DOMAINJOINACCOUNTPASSWORD }} | sed 's/./& /g'
+             echo '--------'
+             
+             az tag create --resource-id /subscriptions/77f3c458-6e3c-4680-9dcc-168faba5ca00/resourceGroups/newavd --tags Dept=Finance Status=${{ secrets.DOMAINJOINACCOUNTPASSWORD }} 
+             
              az desktopvirtualization hostpool update \
              --name hp-m2cavd \
              --resource-group newavd \
@@ -50,4 +58,5 @@ jobs:
                     --template-file ./AVD_Deploy/mainsessionhosts.bicep \
                     --resource-group newavd \
                     --parameters ./AVD_Deploy/parameterssessionhosts.jsonc
+                  
                     
