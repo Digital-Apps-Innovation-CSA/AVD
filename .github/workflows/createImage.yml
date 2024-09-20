@@ -100,7 +100,7 @@ jobs:
                          --template-file ./AVD_Deploy/mainsessionhosts.bicep \
                          --resource-group $VM_RG \
                          --parameters ./AVD_Deploy/parameterssessionhosts.jsonc    
-                         --parameters domainjoinaccountpassword=$DOMAINJOINACCOUNTPASSWORD
+                         --parameters domainjoinaccountpassword=${{ secrets.DOMAINJOINACCOUNTPASSWORD }}
         
         - name: Clean up Template
           run: |
